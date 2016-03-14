@@ -10,7 +10,7 @@
     CKEDITOR.plugins.add('codemirror', {
         icons: 'searchcode,autoformat,commentselectedrange,uncommentselectedrange,autocomplete', // %REMOVE_LINE_CORE%
         lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en-au,en-ca,en-gb,en,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,ug,uk,vi,zh-cn,zh', // %REMOVE_LINE_CORE%
-        version: 1.12,
+        version: 1.13,
         init: function (editor) {
             var rootPath = this.path,
                 defaultConfig = {
@@ -74,12 +74,12 @@
                             matchTags: config.matchTags,
                             workDelay: 300,
                             workTime: 35,
-                            readOnly: editor.config.readOnly,
+                            readOnly: editor.readOnly,
                             lineNumbers: config.lineNumbers,
                             lineWrapping: config.lineWrapping,
                             autoCloseTags: config.autoCloseTags,
                             autoCloseBrackets: config.autoCloseBrackets,
-                            highligctionMatches: config.highlightMatches,
+                            highlightSelectionMatches: config.highlightMatches,
                             continueComments: config.continueComments,
                             indentWithTabs: config.indentWithTabs,
                             theme: config.theme,
@@ -93,8 +93,16 @@
                                     if (config.enableCodeFolding) {
                                         window["foldFunc_" + editor.id](codeMirror_Editor, codeMirror_Editor.getCursor().line);
                                     }
+                                },
+                                "'>'": function (codeMirror_Editor) {
+                                    codeMirror_Editor.closeTag(codeMirror_Editor, '>');
+                                },
+                                "'/'": function (codeMirror_Editor) {
+                                    codeMirror_Editor.closeTag(codeMirror_Editor, '/');
                                 }
                             },
+                            foldGutter: true,
+                            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                             onKeyEvent: function (codeMirror_Editor, evt) {
                                 if (config.enableCodeFormatting) {
                                     var range = getSelectedRange();
@@ -185,17 +193,17 @@
                             // Load the content
                             this.setValueOf('main', 'data', oldData = editor.getData());
 
-                            if (!IsStyleSheetAlreadyLoaded(CKEDITOR.getUrl('plugins/codemirror/css/codemirror.min.css'))) {
-                                CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl('plugins/codemirror/css/codemirror.min.css'));
+                            if (!IsStyleSheetAlreadyLoaded(rootPath + 'css/codemirror.min.css')) {
+                                CKEDITOR.document.appendStyleSheet(rootPath + 'css/codemirror.min.css');
                             }
 
-                            if (config.theme.length && config.theme != 'default' && !IsStyleSheetAlreadyLoaded(CKEDITOR.getUrl('plugins/codemirror/css/codemirror.min.css'))) {
-                                CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl('plugins/codemirror/theme/' + config.theme + '.css'));
+                            if (config.theme.length && config.theme != 'default' && !IsStyleSheetAlreadyLoaded(rootPath + 'theme/' + config.theme + '.css')) {
+                                CKEDITOR.document.appendStyleSheet(rootPath + 'theme/' + config.theme + '.css');
                             }
 
                             if (typeof (CodeMirror) == 'undefined') {
 
-                                CKEDITOR.scriptLoader.load(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.min.js'), function() {
+                                CKEDITOR.scriptLoader.load(rootPath + 'js/codemirror.min.js', function() {
 
                                     CKEDITOR.scriptLoader.load(getCodeMirrorScripts(), function() {
                                         loadCodeMirrorInline(editor, textArea);
@@ -520,17 +528,17 @@
             }
 
             editor.addMode('source', function (callback) {
-                if (!IsStyleSheetAlreadyLoaded(CKEDITOR.getUrl('plugins/codemirror/css/codemirror.min.css'))) {
-                    CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl('plugins/codemirror/css/codemirror.min.css'));
+                if (!IsStyleSheetAlreadyLoaded(rootPath + 'css/codemirror.min.css')) {
+                    CKEDITOR.document.appendStyleSheet(rootPath + 'css/codemirror.min.css');
                 }
 
-                if (config.theme.length && config.theme != 'default' && !IsStyleSheetAlreadyLoaded(CKEDITOR.getUrl('plugins/codemirror/css/codemirror.min.css'))) {
-                    CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl('plugins/codemirror/theme/' + config.theme + '.css'));
+                if (config.theme.length && config.theme != 'default' && !IsStyleSheetAlreadyLoaded(rootPath + 'theme/' + config.theme + '.css')) {
+                    CKEDITOR.document.appendStyleSheet(rootPath + 'theme/' + config.theme + '.css');
                 }
 
                 if (typeof (CodeMirror) == 'undefined') {
 
-                    CKEDITOR.scriptLoader.load(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.min.js'), function() {
+                    CKEDITOR.scriptLoader.load(rootPath + 'js/codemirror.min.js', function() {
 
                         CKEDITOR.scriptLoader.load(getCodeMirrorScripts(), function() {
                             loadCodeMirror(editor);
@@ -552,55 +560,55 @@
             });
 
             function getCodeMirrorScripts() {
-                var scriptFiles = [CKEDITOR.getUrl('plugins/codemirror/js/codemirror.addons.min.js')];
+                var scriptFiles = [rootPath + 'js/codemirror.addons.min.js'];
 
                 switch (config.mode) {
                 case "bbcode":
                     {
-                        scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.bbcode.min.js'));
+                        scriptFiles.push(rootPath + 'js/codemirror.mode.bbcode.min.js');
                     }
 
                     break;
                 case "bbcodemixed":
                         {
-                            scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.bbcodemixed.min.js'));
+                            scriptFiles.push(rootPath + 'js/codemirror.mode.bbcodemixed.min.js');
                         }
 
                         break;
                 case "htmlmixed":
                     {
-                        scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.htmlmixed.min.js'));
+                        scriptFiles.push(rootPath + 'js/codemirror.mode.htmlmixed.min.js');
                     }
 
                     break;
                 case "text/html":
                     {
-                        scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.htmlmixed.min.js'));
+                        scriptFiles.push(rootPath + 'js/codemirror.mode.htmlmixed.min.js');
                     }
 
                     break;
                 case "application/x-httpd-php":
                     {
-                        scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.php.min.js'));
+                        scriptFiles.push(rootPath + 'js/codemirror.mode.php.min.js');
                     }
 
                     break;
                 case "text/javascript":
                     {
-                        scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.javascript.min.js'));
+                        scriptFiles.push(rootPath + 'js/codemirror.mode.javascript.min.js');
                     }
 
                     break;
                 default:
-                    scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.mode.htmlmixed.min.js'));
+                    scriptFiles.push(rootPath + 'js/codemirror.mode.htmlmixed.min.js');
                 }
 
                 if (config.useBeautify) {
-                    scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/beautify.min.js'));
+                    scriptFiles.push(rootPath + 'js/beautify.min.js');
                 }
 
                 if (config.enableSearchTools) {
-                    scriptFiles.push(CKEDITOR.getUrl('plugins/codemirror/js/codemirror.addons.search.min.js'));
+                    scriptFiles.push(rootPath + 'js/codemirror.addons.search.min.js');
                 }
                 return scriptFiles;
             }
@@ -626,7 +634,9 @@
                     'role': 'textbox',
                     'aria-label': ariaLabel
                 });
-                textarea.addClass('cke_source cke_reset cke_enable_context_menu');
+                textarea.addClass('cke_source');
+                textarea.addClass('cke_reset');
+                textarea.addClass('cke_enable_context_menu');
                 editor.ui.space('contents').append(textarea);
                 window["editable_" + editor.id] = editor.editable(new sourceEditable(editor, textarea));
                 // Fill the textarea with the current editor data.
@@ -686,6 +696,12 @@
                         if (config.enableCodeFolding) {
                             window["foldFunc_" + editor.id](codeMirror_Editor, codeMirror_Editor.getCursor().line);
                         }
+                    },
+                    "'>'": function (codeMirror_Editor) {
+                        codeMirror_Editor.closeTag(codeMirror_Editor, '>');
+                    },
+                    "'/'": function (codeMirror_Editor) {
+                        codeMirror_Editor.closeTag(codeMirror_Editor, '/');
                     }
                 };
 
@@ -697,9 +713,9 @@
                     matchTags: config.matchTags,
                     workDelay: 300,
                     workTime: 35,
-                    readOnly: editor.config.readOnly,
+                    readOnly: editor.readOnly,
                     lineNumbers: config.lineNumbers,
-                    lineWrapping: config.lineWrapping,
+                    lineWrapping: true,
                     autoCloseTags: config.autoCloseTags,
                     autoCloseBrackets: config.autoCloseBrackets,
                     highlightSelectionMatches: config.highlightMatches,
@@ -711,6 +727,8 @@
                     styleActiveLine: config.styleActiveLine,
                     //extraKeys: {"Ctrl-Space": "autocomplete"},
                     extraKeys: extraKeys,
+                    foldGutter: true,
+                    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                     onKeyEvent: function (codeMirror_Editor, evt) {
                         
                         if (config.enableCodeFormatting) {
@@ -944,6 +962,7 @@
             }
 
             editor.on('setData', function (data) {
+ 
                 if (window["editable_" + editor.id] && editor.mode === 'source') {
                     window["codemirror_" + editor.id].setValue(data.data.dataValue);
                 }
@@ -954,6 +973,7 @@
         base: CKEDITOR.editable,
         proto: {
             setData: function(data) {
+
                 this.setValue(data);
 
                 if (this.codeMirror != null) {
@@ -1029,7 +1049,7 @@ CKEDITOR.plugins.sourcearea = {
                 source: 1
             },
             editorFocus: false,
-            readOnly: 1,
+            readOnly: 0,
             exec: function (editor) {
                 var range = {
                     from: window["codemirror_" + editor.id].getCursor(true),
@@ -1045,7 +1065,7 @@ CKEDITOR.plugins.sourcearea = {
                 source: 1
             },
             editorFocus: false,
-            readOnly: 1,
+            readOnly: 0,
             exec: function (editor) {
                 var range = {
                     from: window["codemirror_" + editor.id].getCursor(true),
@@ -1061,7 +1081,7 @@ CKEDITOR.plugins.sourcearea = {
                 source: 1
             },
             editorFocus: false,
-            readOnly: 1,
+            readOnly: 0,
             exec: function(editor) {
                 var range = {
                     from: window["codemirror_" + editor.id].getCursor(true),

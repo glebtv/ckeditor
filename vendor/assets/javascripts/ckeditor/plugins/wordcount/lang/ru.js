@@ -5,7 +5,9 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 CKEDITOR.plugins.setLang('wordcount', 'ru', {
     WordCount: 'Слов:',
     CharCount: 'Символов:',
-    CharCountWithHTML: 'Символов (включая HTML):',
-    limit: 'Лимит:',
+    CharCountWithHTML: ' (включая HTML разметку: %charCountHTML%)',
+    Paragraphs: 'Параграфов:',
+    pasteWarning: 'Контент не может быть вставлен, т.к. привышает допустимый лимит',
+    Selected: 'Выделено: ',
     title: 'Статистика'
 });

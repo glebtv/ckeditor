@@ -1,8 +1,12 @@
 window['CKEDITOR_BASEPATH'] = "/assets/ckeditor/";
 
 window.CKEDITOR_ASSETS_MAPPING = {
-<% Rails.application.assets.each_logical_path(Rails.application.config.assets.precompile).select {|path| path =~ /ckeditor/ && path != 'ckeditor/override.js' && path != 'ckeditor/init.js' && path != 'ckeditor/ckeditor.js' && path.index('ckeditor/filebrowser').nil? && path.index('.md').nil? && (path.index('.html').nil? || !path.index('.htmlm').nil?) && path.index('LICENSE').nil? && path.index('README').nil? && path != 'ckeditor/plugins/preview/preview.js' && path != 'ckeditor/plugins/wsc/dialogs/ciframe.js' && path != 'ckeditor/plugins/wsc/dialogs/tmpFrameset.js'}.each do |asset| %>
-  "<%= asset %>": "<%= asset_path(asset) %>",
+<% assets = Rails.application.assets || Sprockets::Railtie.build_environment(Rails.application) %>
+<% prefix_length = Rails.root.join('app', 'assets').to_s.length %>
+<% assets.each_file().select {|path| path =~ /ckeditor/ && path !~ /override\.js/ && path !~ /init\.js/ && path !~ /ckeditor\.js/ && path.index('ckeditor/filebrowser').nil? && path.index('.md').nil? && (path.index('.html').nil? || !path.index('.htmlm').nil?) && path.index('LICENSE').nil? && path.index('README').nil? }.each do |asset| %>
+  <% f = asset[prefix_length..-1] %>
+  <% f = f.split('/')[2..-1].join('/') %>
+  "<%= f %>": "<%= asset_path(f) %>",
 <% end %>
 }
 

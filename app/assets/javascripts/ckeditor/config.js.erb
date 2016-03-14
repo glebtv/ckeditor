@@ -1,7 +1,7 @@
 CKEDITOR.editorConfig = function( config ) {
   // Define changes to default configuration here. For example:
   config.language = 'ru';
-  
+
   // config.uiColor = '#AADC6E';
   config.skin = 'moono';
 
@@ -28,7 +28,7 @@ CKEDITOR.editorConfig = function( config ) {
   config.filebrowserUploadUrl = "/ckeditor/attachment_files";
 
   config.stylesSet = [];
-  config.extraPlugins = "colorbutton,colordialog,font,magicline,codemirror,mediaembed,stylesheetparser,ipsum,CKCss,wordcount,youtube,map";
+  config.extraPlugins = "colorbutton,colordialog,font,magicline,codemirror,stylesheetparser,loremipsum,CKCss,wordcount,youtube,lineheight";
   config.contentsCss = "<%= stylesheet_path('ckcontent.css') %>";
 
   config.tabSpaces = 2;
@@ -39,9 +39,9 @@ CKEDITOR.editorConfig = function( config ) {
         ['Styles','Format','Font','FontSize', 'TextColor', 'BGColor'],  ['JustifyLeft','JustifyCenter', 'JustifyRight', 'JustifyBlock'],
         '/',
         ['Bold','Italic','Underline'], ['NumberedList','BulletedList','Blockquote'],
-        ['Link','Unlink'], ['Image', 'Flash'],
+        ['Link','Unlink'], ['lineheight'], ['Image', 'Flash'],
         ['Table','HorizontalRule','SpecialChar'], ['Maximize', 'Subscript', 'Superscript'], ['Outdent','Indent', 'ShowBlocks'],
-        ['ipsum', 'CKCss', 'Youtube', 'map']
+        ['loremipsum', 'CKCss', 'Youtube']
     ];
 
   config.font_names = 'Arial/Arial, Helvetica, sans-serif;Times New Roman/Times New Roman, Times, serif;Verdana;TrebuchetMS';
@@ -56,9 +56,9 @@ CKEDITOR.editorConfig = function( config ) {
       meta = metas[i];
 
       if (meta.name == "csrf-token") {
-          csrf_token = meta.content;                            
+          csrf_token = meta.content;
       } else if (meta.name == "csrf-param") {
-          csrf_param = meta.content;                                   
+          csrf_param = meta.content;
       }
     }
 
