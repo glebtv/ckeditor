@@ -6,6 +6,7 @@ module Ckeditor
   autoload :Http, 'ckeditor/http'
   autoload :TextArea, 'ckeditor/text_area'
   autoload :Paginatable, 'ckeditor/paginatable'
+  autoload :AssetResponse, 'ckeditor/asset_response'
 
   module Helpers
     autoload :ViewHelper, 'ckeditor/helpers/view_helper'
@@ -24,6 +25,7 @@ module Ckeditor
     autoload :Paperclip, 'ckeditor/backend/paperclip'
     autoload :CarrierWave, 'ckeditor/backend/carrierwave'
     autoload :Dragonfly, 'ckeditor/backend/dragonfly'
+    autoload :Refile, 'ckeditor/backend/refile'
   end
 
   IMAGE_TYPES = %w(image/jpeg image/png image/gif image/jpg image/pjpeg image/tiff image/x-png)
@@ -44,19 +46,23 @@ module Ckeditor
   # Allowed attachment file types for upload.
   # Set to nil or [] (empty array) for all file types
   mattr_accessor :attachment_file_types
-  @@attachment_file_types = %w(doc docx xls odt ods pdf rar zip tar tar.gz swf png gif jpg jpeg bmp psd)
+  @@attachment_file_types = %w(doc docx xls odt ods pdf rar zip tar tar.gz swf)
 
   # Ckeditor files destination path
   mattr_accessor :relative_path
-  @@relative_path = '/assets/ckeditor'
+  @@relative_path = 'ckeditor'
 
   # Ckeditor assets path
   mattr_accessor :asset_path
-  @@asset_path = (Rails::VERSION::MAJOR == 4 ? 'assets/ckeditor' : 'ckeditor')
+  @@asset_path = nil
 
   # Ckeditor assets for precompilation
   mattr_accessor :assets
   @@assets = nil
+
+  # Remove digest from ckeditor asset files while running assets:precompile task?
+  mattr_accessor :run_on_precompile
+  @@run_on_precompile = true
 
   # Turn on/off filename parameterize
   mattr_accessor :parameterize_filenames
@@ -72,9 +78,21 @@ module Ckeditor
   @@assets_languages = nil
   @@assets_plugins = nil
 
+  # CKEditor CDN
+  mattr_accessor :cdn_url
+  @@cdn_url = nil
+
+  # Url to ckeditor config, used when CDN enabled
+  mattr_accessor :js_config_url
+  @@js_config_url = '/assets/ckeditor/config.js'
+
   # Model classes
   @@picture_model = nil
   @@attachment_file_model = nil
+
+  # Configurable parent controller
+  mattr_accessor :parent_controller
+  @@parent_controller = 'ApplicationController'
 
   # Default way to setup Ckeditor. Run rails generate ckeditor to create
   # a fresh initializer with all configuration values.
@@ -93,9 +111,25 @@ module Ckeditor
     @root_path ||= Pathname.new(File.dirname(File.expand_path('../', __FILE__)))
   end
 
+  def self.base_path
+    @base_path ||= (asset_path || File.join([Rails.application.config.assets.prefix, '/ckeditor/']))
+  end
+
   # All css and js files from ckeditor folder
   def self.assets
-    @@assets ||= Utils.select_assets("ckeditor", "vendor/assets/javascripts") + ["ckeditor/init.js", 'ckcontent.css']
+    @@assets ||= if Ckeditor.cdn_enabled?
+      ["ckeditor/config.js"]
+    else
+      Utils.select_assets("ckeditor", "vendor/assets/javascripts") << "ckeditor/init.js"
+    end
+  end
+
+  def self.run_on_precompile?
+    @@run_on_precompile
+  end
+
+  def self.cdn_enabled?
+    !@@cdn_url.nil?
   end
 
   def self.picture_model(&block)

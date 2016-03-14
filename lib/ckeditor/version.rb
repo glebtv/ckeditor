@@ -1,3 +1,6 @@
 module Ckeditor
-  VERSION="4.5.7.0".freeze
+  module Version
+    GEM = "4.5.7".freeze
+    EDITOR = "4.5.7".freeze
+  end
 end

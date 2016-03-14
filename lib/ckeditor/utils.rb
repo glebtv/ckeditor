@@ -3,6 +3,9 @@ require 'active_support/json/encoding'
 
 module Ckeditor
   module Utils
+    autoload :JavascriptCode, 'ckeditor/utils/javascript_code'
+    autoload :ContentTypeDetector, 'ckeditor/utils/content_type_detector'
+
     class << self
       def escape_single_quotes(str)
         str.gsub('\\','\0\0').gsub('</','<\/').gsub(/\r\n|\n|\r/, "\\n").gsub(/["']/) { |m| "\\#{m}" }
@@ -18,16 +21,16 @@ module Ckeditor
       end
 
       def js_replace(dom_id, options = nil)
-        js = ["if (typeof CKEDITOR != 'undefined') {"]
+        js = ["(function() { if (typeof CKEDITOR != 'undefined') {"]
 
         if options && !options.keys.empty?
           js_options = ActiveSupport::JSON.encode(options)
-          js << "CKEDITOR.replace('#{dom_id}', #{js_options});"
+          js << "if (CKEDITOR.instances['#{dom_id}'] == undefined) { CKEDITOR.replace('#{dom_id}', #{js_options}); }"
         else
-          js << "CKEDITOR.replace('#{dom_id}');"
+          js << "if (CKEDITOR.instances['#{dom_id}'] == undefined) { CKEDITOR.replace('#{dom_id}'); }"
         end
 
-        js << "}"
+        js << "} else { setTimeout(arguments.callee, 50); } })();"
         js.join(" ").html_safe
       end
 
@@ -36,17 +39,18 @@ module Ckeditor
 
         case uploader_type.to_s.downcase
           when "image" then
-            options[:action] = "EDITOR.config.filebrowserImageUploadUrl"
+            options[:action] = JavascriptCode.new("EDITOR.config.filebrowserImageUploadUrl")
             options[:allowedExtensions] = Ckeditor.image_file_types
           when "flash" then
-            options[:action] = "EDITOR.config.filebrowserFlashUploadUrl"
+            options[:action] = JavascriptCode.new("EDITOR.config.filebrowserFlashUploadUrl")
             options[:allowedExtensions] = ["swf"]
           else
-            options[:action] = "EDITOR.config.filebrowserUploadUrl"
+            options[:action] = JavascriptCode.new("EDITOR.config.filebrowserUploadUrl")
             options[:allowedExtensions] = Ckeditor.attachment_file_types
         end
 
-        js_options = ActiveSupport::JSON.encode(options).gsub /"EDITOR.config.filebrowser(.*)UploadUrl"/, 'EDITOR.config.filebrowser\1UploadUrl'
+        js_options = ActiveSupport::JSON.encode(options)
+        js_options.gsub!(/"(EDITOR\.config\.filebrowser(Image|Flash|)UploadUrl)"/, '\1')
 
         "(function() { new qq.FileUploaderInput(#{js_options}); }).call(this);".html_safe
       end
@@ -64,14 +68,15 @@ module Ckeditor
       end
 
       def select_assets(path, relative_path)
-        relative_folder = Ckeditor.root_path.join relative_path
-        folder = relative_folder.join path
-        extensions = '*.{js,css,png,gif,jpg,scss}'
+        relative_folder = Ckeditor.root_path.join(relative_path)
+        folder = relative_folder.join(path)
+        extensions = '*.{js,css,png,gif,jpg}'
+        languages = (Ckeditor.assets_languages || [])
 
         # Files at root
         files = Dir[folder.join(extensions)]
 
-        # Plugins
+        # Filter plugins
         if Ckeditor.assets_plugins.nil?
           files += Dir[folder.join('plugins', '**', extensions)]
         else
@@ -83,22 +88,20 @@ module Ckeditor
         # Other folders
         Dir[folder.join('*/')].each do |subfolder|
           path = Pathname.new(subfolder)
-          unless path.basename.to_s == 'plugins'
-            files += Dir[path.join('**', extensions)]
-          end
+          next if ['plugins'].include?(path.basename.to_s)
+          files += Dir[path.join('**', extensions)]
         end
 
-        paths = files.map { |file| Pathname.new(file) }
+        files.inject([]) do |items, name|
+          file = Pathname.new(name)
+          base = file.basename('.*').to_s
 
-        # Filter languages
-        if Ckeditor.assets_languages.present?
-          paths.select! do |path|
-            path.dirname.basename.to_s != 'lang' ||
-            Ckeditor.assets_languages.include?(path.basename.to_s.split('.')[0])
+          if !name.include?('/lang/') || languages.include?(base)
+            items << file.relative_path_from(relative_folder).to_s
           end
-        end
 
-        paths.map { |path| path.relative_path_from(relative_folder).to_s.gsub('.scss', '') }.select { |path| path != 'ckeditor/ckeditor.js' }
+          items
+        end
       end
     end
   end

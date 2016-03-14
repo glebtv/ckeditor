@@ -6,8 +6,6 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
-require "bundler/gem_tasks"
-
 require 'rake'
 require 'rdoc/task'
 
@@ -63,27 +61,4 @@ RDoc::Task.new do |rdoc|
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
-end
-
-desc "prepare ckeditor CSS"
-task :process_css do
-  path = File.expand_path("../vendor/assets/javascripts/ckeditor/skins/moono", __FILE__).to_s
-  
-  Dir.glob("#{path}/*.css").each do |f|
-    puts f
-    cmd = "sass-convert -F css -T scss #{f} #{f}.scss"
-    unless system(cmd)
-      puts cmd
-      raise 'sass convert error'
-    end    
-    File.delete(f)
-  end
-  Dir.glob("#{path}/*.scss").each do |f|
-    puts f
-    text = File.read(f)
-    text = text.gsub(/ url\((.*)\)/, ' image-url("ckeditor/skins/moono/\1")')
-    File.write(f, text)
-    #File.write(f.gsub('.scss', '.css.scss'), text)
-    #File.delete(f)
-  end
 end
