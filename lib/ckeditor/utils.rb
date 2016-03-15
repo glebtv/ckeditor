@@ -71,7 +71,7 @@ module Ckeditor
         relative_folder = Ckeditor.root_path.join(relative_path)
         folder = relative_folder.join(path)
         extensions = '*.{js,css,png,gif,jpg}'
-        languages = (Ckeditor.assets_languages || [])
+        languages = (Ckeditor.assets_languages || ['en', 'ru'])
 
         # Files at root
         files = Dir[folder.join(extensions)]
