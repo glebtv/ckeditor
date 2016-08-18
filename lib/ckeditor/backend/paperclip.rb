@@ -9,7 +9,7 @@ module Ckeditor
       module ClassMethods
         def self.extended(base)
           base.class_eval do
-            before_validation :extract_content_type
+            # before_validation :extract_content_type
             before_create :read_dimensions, :parameterize_filename
 
             delegate :url, :path, :styles, :size, :content_type, :to => :data

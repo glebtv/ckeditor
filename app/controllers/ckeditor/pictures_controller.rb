@@ -16,6 +16,8 @@ class Ckeditor::PicturesController < Ckeditor::ApplicationController
   end
 
   def destroy
+    return false unless Ckeditor.can_delete
+
     @picture.destroy
 
     respond_to do |format|

@@ -38,6 +38,9 @@ module Ckeditor
     request.env["warden"].try(:user) || respond_to?(:current_user) && current_user
   end
 
+  mattr_accessor :can_delete
+  @@can_delete = true
+
   # Allowed image file types for upload.
   # Set to nil or [] (empty array) for all file types
   mattr_accessor :image_file_types
@@ -120,7 +123,10 @@ module Ckeditor
     @@assets ||= if Ckeditor.cdn_enabled?
       ["ckeditor/config.js"]
     else
-      Utils.select_assets("ckeditor", "vendor/assets/javascripts") << "ckeditor/init.js"
+      assets = Utils.select_assets("ckeditor", "vendor/assets/javascripts")
+      assets << "ckeditor/init.js"
+      assets << 'ckeditor/filebrowser/images/gal_del.png'
+      assets
     end
   end
 
