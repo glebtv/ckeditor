@@ -491,6 +491,7 @@
             },
             onLoad: onLoad(),
             onShow: function () {
+                this.parts.dialog.$.classList.add("ckcss-dialog");
                 var elem = null,
                     elems = null,
                     selection = this.getParentEditor().getSelection();

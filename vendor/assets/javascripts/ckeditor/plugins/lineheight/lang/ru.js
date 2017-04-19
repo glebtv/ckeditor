@@ -1,3 +1,3 @@
-﻿CKEDITOR.plugins.setLang('lineheight','ru', {
-    title: 'Высота строки'
+CKEDITOR.plugins.setLang('lineheight','ru', {
+    title: 'Межстрочный интервал'
 } );

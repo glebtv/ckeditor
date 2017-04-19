@@ -19,6 +19,8 @@
     init: function (editor) {
         var pluginName = 'CKCss';
         CKEDITOR.dialog.add(pluginName, this.path + 'dialogs/ckcss.js');
+        //this doesnt work
+        //editor.addContentsCss(CKEDITOR.getUrl('plugins/CKCss/css/styles.css'));
         editor.addCommand(pluginName, new CKEDITOR.dialogCommand(pluginName));
         editor.ui.addButton('CKCss',
         {

@@ -8,3 +8,12 @@
 .selectOvertype {
 	cursor:text;
 }
+
+.ckcss-dialog{
+    color: red;
+    
+}
+
+.ckcss-dialog .cke_dialog_tab {
+    min-width: 0 !important;
+}
