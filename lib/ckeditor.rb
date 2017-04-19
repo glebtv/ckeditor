@@ -125,6 +125,7 @@ module Ckeditor
     else
       assets = Utils.select_assets("ckeditor", "vendor/assets/javascripts")
       assets << "ckeditor/init.js"
+      assets << "ckeditor/config.js"
       assets << 'ckeditor/filebrowser/images/gal_del.png'
       assets
     end
