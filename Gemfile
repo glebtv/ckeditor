@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gemspec
 
-gem 'rails', '4.2.7'
+gem 'rails', '4.2.10'
 
 platforms :ruby do
   gem 'sqlite3'
@@ -29,7 +29,6 @@ platforms :ruby do
 
   group :mongoid do
     gem 'mongoid', '~> 5.0.0'
-    gem 'bson_ext'
     gem 'mongoid-paperclip', require: 'mongoid_paperclip'
     gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
   end
