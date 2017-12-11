@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/30e3bf5576a4e734c9f0c0c2bdd48465
+ * (2) http://ckeditor.com/builder/c36dd21ab4396fdba1083a7151a9ce19
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/30e3bf5576a4e734c9f0c0c2bdd48465
+ * (3) http://ckeditor.com/builder/download/c36dd21ab4396fdba1083a7151a9ce19
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -25,7 +25,7 @@
  */
 
 var CKBUILDER_CONFIG = {
-	skin: 'moono-lisa',
+	skin: 'minimalist',
 	preset: 'full',
 	ignore: [
 		'.DS_Store',
@@ -38,9 +38,10 @@ var CKBUILDER_CONFIG = {
 		'.jshintignore',
 		'.jshintrc',
 		'.mailmap',
-		'README.md',
+		'.travis.yml',
 		'bender-err.log',
 		'bender-out.log',
+		'bender.ci.js',
 		'bender.js',
 		'dev',
 		'gruntfile.js',

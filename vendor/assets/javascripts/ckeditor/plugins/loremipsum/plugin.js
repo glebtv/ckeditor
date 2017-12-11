@@ -64,7 +64,7 @@
 	CKEDITOR.plugins.add( pluginName, {
 		icons: 'loremipsum',
 		requires: 'richcombo',
-		lang: 'fr,en',
+		lang: 'en,ru',
 		hidpi: true,
 		init: function( editor ) {
 

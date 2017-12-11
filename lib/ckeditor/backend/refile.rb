@@ -5,7 +5,7 @@ module Ckeditor
 
       included do
         validates :data, presence: true
-        delegate :rewind, :download, :to_io, :exists?, :delete, :size, :close, :eof?, :read, to: :data
+        delegate :rewind, :download, :to_io, :exists?, :delete, :close, :eof?, :read, to: :data
         alias_attribute :data_file_name, :data_filename
         alias_attribute :data_file_size, :data_size
       end
@@ -24,14 +24,16 @@ module Ckeditor
         ::Refile.attachment_url(self, :data, *attrs)
       end
 
-      def read_dimensions
+      def magick
+        @magick ||= MiniMagick::Image.open(model.to_io)
+      end
+
+      def extract_dimensions
         if model.image? && model.has_dimensions?
-          magick = MiniMagick::Image.open(model.to_io)
           model.width = magick.width
           model.height = magick.height
         end
       end
-      
     end
   end
 end

@@ -2,11 +2,11 @@
 * Youtube Embed Plugin
 *
 * @author Jonnas Fonini <jonnasfonini@gmail.com>
-* @version 2.1.5
+* @version 2.1.8
 */
 (function () {
 	CKEDITOR.plugins.add('youtube', {
-		lang: [ 'en', 'pt', 'pt-br', 'ja', 'hu', 'it', 'fr', 'tr', 'ru', 'de', 'ar', 'nl', 'pl', 'vi', 'zh', 'el', 'he', 'es', 'nb', 'nn', 'fi', 'et', 'sk', 'cs', 'ko'],
+		lang: [ 'en', 'ru' ],
 		init: function (editor) {
 			editor.addCommand('youtube', new CKEDITOR.dialogCommand('youtube', {
 				allowedContent: 'div{*}(*); iframe{*}[!width,!height,!src,!frameborder,!allowfullscreen]; object param[*]; a[*]; img[*]'

@@ -16,6 +16,8 @@ module Ckeditor
     def scoped
       @scope.limit(limit_value).offset(offset_value)
     end
+    alias all scoped
+    alias to_a scoped
 
     # Next page number in the collection
     def next_page

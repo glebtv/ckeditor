@@ -1,6 +1,7 @@
 require 'active_support'
 require 'action_view/helpers/tag_helper'
 require 'action_view/helpers/form_tag_helper'
+require 'action_view/helpers/javascript_helper'
 
 module Ckeditor
   class TextArea
@@ -14,7 +15,7 @@ module Ckeditor
       @template = template
       @options = options.stringify_keys
       @ck_options = (@options.delete('ckeditor') || {}).stringify_keys
-      @ck_options['customConfig'] ||= Ckeditor.js_config_url if Ckeditor.cdn_enabled?
+      @ck_options['customConfig'] ||= template.asset_path(Ckeditor.js_config_url) if Ckeditor.cdn_enabled?
     end
 
     def render_instance_tag(object_name, method)
@@ -32,22 +33,22 @@ module Ckeditor
 
     protected
 
-      def render(input)
-        output_buffer << input
-        output_buffer << javascript_tag(Utils.js_replace(options['id'], ck_options))
-        output_buffer
-      end
+    def render(input)
+      output_buffer << input
+      output_buffer << javascript_tag(Utils.js_replace(options['id'], ck_options))
+      output_buffer
+    end
 
-      def output_buffer
-        @output_buffer ||= ActiveSupport::SafeBuffer.new
-      end
+    def output_buffer
+      @output_buffer ||= ActiveSupport::SafeBuffer.new
+    end
 
-      def build_tag(object_name, method)
-        if defined?(ActionView::Base::Tags::TextArea)
-          ActionView::Base::Tags::TextArea.new(object_name, method, template, options.symbolize_keys)
-        else
-          ActionView::Base::InstanceTag.new(object_name, method, template, options.delete('object'))
-        end
+    def build_tag(object_name, method)
+      if defined?(ActionView::Base::Tags::TextArea)
+        ActionView::Base::Tags::TextArea.new(object_name, method, template, options.symbolize_keys)
+      else
+        ActionView::Base::InstanceTag.new(object_name, method, template, options.delete('object'))
       end
+    end
   end
 end

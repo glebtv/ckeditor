@@ -1,4 +1,4 @@
-﻿CKEDITOR.plugins.setLang( 'loremipsum', 'ru', {
+CKEDITOR.plugins.setLang( 'loremipsum', 'ru', {
 	title: 'Генератор Lorem Ipsum',
 	toolbar: 'Генератор Lorem Ipsum',
 	paragraph: 'Параграф',

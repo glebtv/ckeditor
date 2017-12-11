@@ -8,7 +8,6 @@ end
 
 require 'rake'
 require 'rdoc/task'
-require "bundler/gem_tasks"
 
 require 'rake/testtask'
 
