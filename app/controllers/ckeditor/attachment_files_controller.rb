@@ -16,6 +16,8 @@ class Ckeditor::AttachmentFilesController < Ckeditor::ApplicationController
   end
 
   def destroy
+    return false unless Ckeditor.can_delete
+
     @attachment.destroy
 
     respond_to do |format|

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    glebtv-ckeditor (4.7.3)
+    glebtv-ckeditor (4.7.3.1)
       cocaine
       orm_adapter (~> 0.5.0)
 
