@@ -1,6 +1,6 @@
 ﻿/**
  * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * For licensing, see LICENSE.md or https://ckeditor.com/license
  */
 
 /**
@@ -10,13 +10,13 @@
  * If you would like to build CKEditor online again
  * (for example to upgrade), visit one the following links:
  *
- * (1) http://ckeditor.com/builder
+ * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/7eaca2f73eef08830ad44dab01060a33
+ * (2) https://ckeditor.com/cke4/builder/9d3a7df83e8d875979e056a2652ffed1
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/7eaca2f73eef08830ad44dab01060a33
+ * (3) https://ckeditor.com/cke4/builder/download/9d3a7df83e8d875979e056a2652ffed1
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -76,7 +76,7 @@ var CKBUILDER_CONFIG = {
 		'horizontalrule' : 1,
 		'htmlwriter' : 1,
 		'iframe' : 1,
-		'image' : 1,
+		'iframedialog' : 1,
 		'indentblock' : 1,
 		'indentlist' : 1,
 		'justify' : 1,
@@ -103,12 +103,16 @@ var CKBUILDER_CONFIG = {
 		'sourcearea' : 1,
 		'specialchar' : 1,
 		'stylescombo' : 1,
+		'stylesheetparser' : 1,
 		'tab' : 1,
 		'table' : 1,
 		'tabletools' : 1,
 		'templates' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
+		'uploadimage' : 1,
+		'uploadwidget' : 1,
+		'widget' : 1,
 		'wsc' : 1,
 		'wysiwygarea' : 1
 	},

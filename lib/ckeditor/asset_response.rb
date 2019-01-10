@@ -20,7 +20,7 @@ module Ckeditor
     end
 
     def json?
-      params[:responseType] == JSON_TYPE
+      params.key?(:upload) || ( params[:responseType] == JSON_TYPE && !params.key?(:qqfile) )
     end
 
     def ckeditor?
@@ -28,7 +28,11 @@ module Ckeditor
     end
 
     def file
-      !(ckeditor? || json?) ? params[:qqfile] : params[:upload]
+      if params.key?(:qqfile)
+        params[:qqfile]
+      else
+        params[:upload]
+      end
     end
 
     def current_mode
