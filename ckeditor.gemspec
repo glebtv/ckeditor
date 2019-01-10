@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.authors = ["glebtv", "Igor Galeta"]
   s.email = "glebtv@gmail.com"
   s.licenses = ["MIT"]
-  s.rubyforge_project = "ckeditor"
   s.homepage = "https://github.com/glebtv/ckeditor"
 
   s.files = Dir["{app,config,lib,vendor}/**/*"] + ["MIT-LICENSE", "Rakefile", "Gemfile", "README.md"]
