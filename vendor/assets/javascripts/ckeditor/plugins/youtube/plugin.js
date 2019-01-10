@@ -2,14 +2,14 @@
 * Youtube Embed Plugin
 *
 * @author Jonnas Fonini <jonnasfonini@gmail.com>
-* @version 2.1.8
+* @version 2.1.13
 */
 (function () {
 	CKEDITOR.plugins.add('youtube', {
-		lang: [ 'en', 'ru' ],
+		lang: [ 'en', 'bg', 'pt', 'pt-br', 'ja', 'hu', 'it', 'fr', 'tr', 'ru', 'de', 'ar', 'nl', 'pl', 'vi', 'zh', 'el', 'he', 'es', 'nb', 'nn', 'fi', 'et', 'sk', 'cs', 'ko', 'eu', 'uk'],
 		init: function (editor) {
 			editor.addCommand('youtube', new CKEDITOR.dialogCommand('youtube', {
-				allowedContent: 'div{*}(*); iframe{*}[!width,!height,!src,!frameborder,!allowfullscreen]; object param[*]; a[*]; img[*]'
+				allowedContent: 'div{*}(*); iframe{*}[!width,!height,!src,!frameborder,!allowfullscreen,!allow]; object param[*]; a[*]; img[*]'
 			}));
 
 			editor.ui.addButton('Youtube', {
@@ -239,7 +239,7 @@
 							content = this.getValueOf('youtubePlugin', 'txtEmbed');
 						}
 						else {
-							var url = 'https://', params = [], startSecs;
+							var url = 'https://', params = [], startSecs, paramAutoplay='';
 							var width = this.getValueOf('youtubePlugin', 'txtWidth');
 							var height = this.getValueOf('youtubePlugin', 'txtHeight');
 
@@ -258,6 +258,7 @@
 
 							if (this.getContentElement('youtubePlugin', 'chkAutoplay').getValue() === true) {
 								params.push('autoplay=1');
+								paramAutoplay='autoplay';
 							}
 
 							if (this.getContentElement('youtubePlugin', 'chkControls').getValue() === false) {
@@ -308,7 +309,7 @@
 								content += '<a href="' + url + '" ><img width="' + width + '" height="' + height + '" src="' + imgSrc + '" '  + responsiveStyle + '/></a>';
 							}
 							else {
-								content += '<iframe width="' + width + '" height="' + height + '" src="' + url + '" ' + responsiveStyle;
+								content += '<iframe allow="' + paramAutoplay + ';" width="' + width + '" height="' + height + '" src="' + url + '" ' + responsiveStyle;
 								content += 'frameborder="0" allowfullscreen></iframe>';
 							}
 
