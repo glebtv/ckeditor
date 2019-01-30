@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'cocaine'
+require 'terrapin'
 
 module Ckeditor
   module Utils
@@ -29,8 +29,8 @@ module Ckeditor
       end
 
       def content_type_from_file_command
-        Cocaine::CommandLine.new('file', '-b --mime-type :file').run(file: @file_path).strip
-      rescue Cocaine::CommandLineError
+        Terrapin::CommandLine.new('file', '-b --mime-type :file').run(file: @file_path).strip
+      rescue Terrapin::CommandLineError
         DEFAULT_CONTENT_TYPE
       end
     end
