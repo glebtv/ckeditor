@@ -8,6 +8,9 @@ module Ckeditor
           def filename
             data_file_name
           end
+          def fileName
+            filename
+          end
 
           def size
             data_file_size
@@ -33,14 +36,18 @@ module Ckeditor
             url(:thumb)
           end
 
+          def uploaded
+            1
+          end
+
           def as_json_methods
-            [:url_content, :url_thumb, :size, :filename, :format_created_at]
+            [:url, :url_content, :url_thumb, :size, :filename, :fileName, :format_created_at, :uploaded]
           end
 
           def as_json(options = nil)
             options = {
               methods: as_json_methods,
-              root: 'asset'
+              #root: 'asset'
             }.merge!(options || {})
 
             super(options)

@@ -74,7 +74,8 @@ module Ckeditor
 
   # CKEditor CDN
   mattr_accessor :cdn_url
-  @@cdn_url = '//cdn.ckeditor.com/4.11.3/standard/ckeditor.js'
+  #@@cdn_url = '//cdn.ckeditor.com/4.11.3/standard/ckeditor.js'
+  @@cdn_url = nil
 
   # Url to ckeditor config, used when CDN enabled
   mattr_accessor :js_config_url
@@ -95,7 +96,7 @@ module Ckeditor
   # Turn on/off assets pipeline
   # By default ckeditor will check assets pipeline
   mattr_accessor :assets_pipeline_enabled
-  @@assets_pipeline_enabled = nil
+  @@assets_pipeline_enabled = true
 
   # Default way to setup Ckeditor. Run rails generate ckeditor to create
   # a fresh initializer with all configuration values.
@@ -120,7 +121,10 @@ module Ckeditor
 
   # All css and js files from ckeditor folder
   def self.assets
-    @assets ||= Ckeditor.cdn_enabled? ? ['ckeditor/config.js'] : []
+    @assets ||= Ckeditor.cdn_enabled? ?
+      ['ckeditor/config.js']
+    :
+      Utils.select_assets('ckeditor', 'vendor/assets/javascripts') << 'ckeditor/init.js'
   end
 
   def self.assets=(value)
@@ -240,3 +244,7 @@ end
 
 require 'ckeditor/rails'
 require 'ckeditor/version'
+
+if Object.const_defined?("RailsAdmin")
+  require "ckeditor/rails_admin/field"
+end

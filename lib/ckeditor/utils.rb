@@ -71,6 +71,31 @@ module Ckeditor
           false
         end
       end
+
+      def select_assets(path, relative_path)
+        relative_folder = Ckeditor.root_path.join(relative_path)
+        folder = relative_folder.join(path)
+        extensions = '*.{js,css,png,gif,jpg,html}'
+
+        # Files at root
+        files = Dir[folder.join(extensions)]
+
+        files += Dir[folder.join('plugins', '**', extensions)]
+
+        # Other folders
+        Dir[folder.join('*/')].each do |subfolder|
+          path = Pathname.new(subfolder)
+          next if ['plugins'].include?(path.basename.to_s)
+          files += Dir[path.join('**', extensions)]
+        end
+
+        files.inject([]) do |items, name|
+          file = Pathname.new(name)
+          base = file.basename('.*').to_s
+          items << file.relative_path_from(relative_folder).to_s
+          items
+        end
+      end
     end
   end
 end

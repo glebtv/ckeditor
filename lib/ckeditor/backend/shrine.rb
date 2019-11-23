@@ -12,16 +12,16 @@ module Ckeditor
           data_url
         end
 
-        def data_file_name
+        def filename
           datasource['filename']
         end
 
-        def data_file_size
+        def size
           datasource['size']
         end
 
         def datasource
-          @datasource ||= data&.metadata || {}
+          data.metadata
         end
       end
     end
