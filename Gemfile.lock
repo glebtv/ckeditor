@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    glebtv-ckeditor (5.0.0)
+    glebtv-ckeditor (4.13.0)
       orm_adapter (~> 0.5.0)
       terrapin
 
