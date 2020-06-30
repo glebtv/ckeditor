@@ -2,7 +2,7 @@
 * Youtube Embed Plugin
 *
 * @author Jonnas Fonini <jonnasfonini@gmail.com>
-* @version 2.1.13
+* @version 2.1.14
 */
 (function () {
 	CKEDITOR.plugins.add('youtube', {
@@ -305,11 +305,11 @@
 							}
 							else
 							if (this.getContentElement('youtubePlugin', 'chkNoEmbed').getValue() === true) {
-								var imgSrc = '//img.youtube.com/vi/' + video + '/sddefault.jpg';
+								var imgSrc = 'https://img.youtube.com/vi/' + video + '/sddefault.jpg';
 								content += '<a href="' + url + '" ><img width="' + width + '" height="' + height + '" src="' + imgSrc + '" '  + responsiveStyle + '/></a>';
 							}
 							else {
-								content += '<iframe allow="' + paramAutoplay + ';" width="' + width + '" height="' + height + '" src="' + url + '" ' + responsiveStyle;
+								content += '<iframe ' + (paramAutoplay ? 'allow="' + paramAutoplay + ';" ' : '') + 'width="' + width + '" height="' + height + '" src="' + url + '" ' + responsiveStyle;
 								content += 'frameborder="0" allowfullscreen></iframe>';
 							}
 
@@ -335,7 +335,7 @@ function handleLinkChange(el, api) {
 	if (el.getValue().length > 0) {
 		el.getDialog().getContentElement('youtubePlugin', 'txtEmbed').disable();
 	}
-	else {
+	else if (!disabled.length || !disabled.includes('txtEmbed')) {
 		el.getDialog().getContentElement('youtubePlugin', 'txtEmbed').enable();
 	}
 
